@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChatRoom — Conecte-se com amigos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body data-theme="dark">
+
+  <!-- ═══════════════ LANDING SCREEN ═══════════════ -->
+  <div id="screen-landing" class="screen active">
+    <div class="landing-bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+    <div class="landing-container">
+      <div class="landing-header">
+        <div class="logo">
+          <div class="logo-icon"><span></span><span></span><span></span></div>
+          <span class="logo-text">chatroom</span>
+        </div>
+        <p class="tagline">Conversas privadas. Instantâneas. Elegantes.</p>
+      </div>
+
+      <div class="landing-card glass">
+        <div class="input-group">
+          <label for="input-name">Seu nome</label>
+          <input id="input-name" type="text" placeholder="Como você quer ser chamado?" maxlength="24" autocomplete="off" />
+        </div>
+
+        <div class="divider"><span>o que você quer fazer?</span></div>
+
+        <div class="landing-actions">
+          <button id="btn-create" class="btn btn-primary">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Criar Sala
+          </button>
+
+          <div class="join-group">
+            <input id="input-code" type="text" inputmode="numeric" pattern="\d{4}" placeholder="Código da sala" maxlength="4" autocomplete="off" />
+            <button id="btn-join" class="btn btn-secondary">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+              Entrar
+            </button>
+          </div>
+        </div>
+
+        <div id="landing-error" class="error-msg hidden"></div>
+      </div>
+
+      <p class="landing-footer">Sem cadastro. Sem rastreamento. Só conversa.</p>
+    </div>
+  </div>
+
+  <!-- ═══════════════ CHAT SCREEN ═══════════════ -->
+  <div id="screen-chat" class="screen">
+    <!-- Settings Panel Overlay -->
+    <div id="settings-overlay" class="settings-overlay hidden"></div>
+
+    <!-- Settings Panel -->
+    <aside id="settings-panel" class="settings-panel glass hidden">
+      <div class="settings-header">
+        <h3>Configurações</h3>
+        <button id="btn-settings-close" class="icon-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        </button>
+      </div>
+
+      <div class="settings-body">
+        <section class="settings-section">
+          <h4>Aparência</h4>
+          <div class="setting-row">
+            <span>Tema</span>
+            <div class="toggle-group">
+              <button class="toggle-btn active" data-theme-toggle="dark">Escuro</button>
+              <button class="toggle-btn" data-theme-toggle="light">Claro</button>
+            </div>
+          </div>
+          <div class="setting-row">
+            <span>Animações</span>
+            <label class="switch"><input type="checkbox" id="toggle-animations" checked /><span class="slider"></span></label>
+          </div>
+          <div class="setting-row col">
+            <span>Tamanho da fonte</span>
+            <input type="range" id="font-size-range" min="12" max="20" value="15" class="range-input" />
+          </div>
+          <div class="setting-row col">
+            <span>Transparência do chat</span>
+            <input type="range" id="opacity-range" min="50" max="100" value="85" class="range-input" />
+          </div>
+        </section>
+
+        <section class="settings-section">
+          <h4>Fundo do Chat</h4>
+          <div class="bg-colors">
+            <button class="bg-swatch active" data-bg="default" style="background: linear-gradient(135deg,#0d0d14,#13131f)"></button>
+            <button class="bg-swatch" data-bg="midnight" style="background: linear-gradient(135deg,#0a0a1a,#0d1a2e)"></button>
+            <button class="bg-swatch" data-bg="forest" style="background: linear-gradient(135deg,#050f0a,#0a1f14)"></button>
+            <button class="bg-swatch" data-bg="ember" style="background: linear-gradient(135deg,#120808,#1a0d0d)"></button>
+            <button class="bg-swatch" data-bg="aurora" style="background: linear-gradient(135deg,#080d14,#0d0820)"></button>
+            <button class="bg-swatch" data-bg="light1" style="background: linear-gradient(135deg,#f0f2f5,#e8eaf0)"></button>
+          </div>
+          <label class="upload-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Usar imagem personalizada
+            <input type="file" id="bg-upload" accept="image/*" class="hidden" />
+          </label>
+        </section>
+      </div>
+    </aside>
+
+    <!-- Chat Layout -->
+    <div class="chat-layout">
+
+      <!-- Sidebar -->
+      <aside class="chat-sidebar glass">
+        <div class="sidebar-top">
+          <div class="logo small">
+            <div class="logo-icon"><span></span><span></span><span></span></div>
+            <span class="logo-text">chatroom</span>
+          </div>
+          <div class="room-info">
+            <div class="room-code-display">
+              <span class="room-code-label">Sala</span>
+              <div class="room-code-value">
+                <span id="display-room-code">—</span>
+                <button id="btn-copy-code" class="icon-btn copy-btn" title="Copiar código">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                </button>
+              </div>
+            </div>
+            <div class="participant-count">
+              <span class="dot-live"></span>
+              <span id="participant-count">1</span> online
+            </div>
+          </div>
+        </div>
+
+        <div class="participants-list" id="participants-list">
+          <!-- populated by JS -->
+        </div>
+
+        <div class="sidebar-bottom">
+          <button id="btn-settings" class="icon-btn" title="Configurações">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+          </button>
+          <button id="btn-leave" class="btn btn-danger-sm">Sair da Sala</button>
+        </div>
+      </aside>
+
+      <!-- Main chat area -->
+      <main class="chat-main">
+        <div class="chat-header glass">
+          <button id="btn-sidebar-toggle" class="icon-btn mobile-only">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="chat-header-info">
+            <h2 id="chat-title">Sala <span id="header-room-code">—</span></h2>
+            <span class="typing-indicator" id="typing-indicator"></span>
+          </div>
+          <div class="chat-header-actions">
+            <button id="btn-emoji-panel" class="icon-btn" title="Emojis">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Messages -->
+        <div class="messages-container" id="messages-container">
+          <div class="messages-inner" id="messages-inner">
+            <div class="welcome-message" id="welcome-message">
+              <div class="welcome-icon">✦</div>
+              <p>A conversa começa agora.<br/>Seja o primeiro a dizer algo.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Emoji Panel -->
+        <div id="emoji-panel" class="emoji-panel glass hidden">
+          <div class="emoji-grid">
+            😀 😂 🥲 😍 🤩 😎 🥹 😅 😭 😤 🤔 🙄 😏 🥰 😇 🤯
+            👋 🤝 👍 👎 ❤️ 🔥 ✨ 💯 🎉 🙌 💪 🫶 😈 👀 💀 🤌
+            🚀 🌙 ⭐ 🌈 💎 🎵 🎮 🍕 ☕ 🐱 🐶 🦊 🌸 🍀 ⚡ 🎯
+          </div>
+        </div>
+
+        <!-- Input area -->
+        <div class="chat-input-area glass">
+          <label id="img-upload-label" class="icon-btn" title="Enviar imagem">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+            <input type="file" id="img-upload" accept="image/*" class="hidden" />
+          </label>
+          <textarea id="msg-input" placeholder="Escreva uma mensagem..." rows="1" maxlength="2000"></textarea>
+          <button id="btn-send" class="send-btn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          </button>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
